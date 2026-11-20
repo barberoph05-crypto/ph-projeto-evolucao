@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<title>PH | Projeto Evolução</title>
+<style>
+:root{--bg:#101010;--panel:#1b1b1b;--line:#303030;--gold:#d4af37;--muted:#a7a7a7;--white:#f7f7f7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:env(safe-area-inset-top) 16px calc(90px + env(safe-area-inset-bottom))}
+header{padding:24px 2px 16px;display:flex;justify-content:space-between;align-items:center}h1{font-size:22px;margin:0;letter-spacing:.5px}h1 span{color:var(--gold)}.sub{color:var(--muted);font-size:12px;margin-top:5px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0}.hero{background:linear-gradient(135deg,#242018,#171717);border-color:#514421}.eyebrow{font-size:11px;color:var(--muted);letter-spacing:1.2px}.big{font-size:38px;font-weight:800;margin:6px 0}.gold{color:var(--gold)}.muted{color:var(--muted)}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{font-size:24px;font-weight:750;margin:8px 0 3px}.bar{height:8px;background:#383838;border-radius:20px;overflow:hidden;margin:10px 0}.bar i{display:block;height:100%;background:var(--gold);width:0%}button,.btn{background:var(--gold);color:#171717;border:0;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;cursor:pointer}.secondary{background:#303030;color:white}.small{padding:9px 11px}.tabs{position:fixed;bottom:0;left:0;right:0;background:#171717;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 4px calc(10px + env(safe-area-inset-bottom));z-index:5}.tabs button{background:transparent;color:#aaa;padding:8px 5px;font-size:11px;flex:1}.tabs button.active{color:var(--gold)}.tabs b{display:block;font-size:18px;margin-bottom:3px}section{display:none}section.active{display:block}input,select,textarea{width:100%;background:#101010;color:white;border:1px solid #414141;border-radius:10px;padding:12px;font-size:16px;margin:6px 0 12px}label{font-size:13px;color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap}.listitem{padding:11px 0;border-bottom:1px solid var(--line)}.listitem:last-child{border:0}.hint{font-size:12px;color:var(--muted);line-height:1.5}.title{font-size:18px;font-weight:750;margin:4px 0 12px}
+</style>
+</head>
+<body>
+<header><div><h1>PH <span>| PROJETO EVOLUÇÃO</span></h1><div class="sub">TREINE • ALIMENTE-SE • EVOLUA</div></div><div class="gold" style="font-size:25px">✦</div></header>
+
+<section id="home" class="active">
+ <div class="card hero"><div class="eyebrow">SUA META</div><div class="big">95 <span class="gold">KG</span></div><div class="row"><span class="muted">Peso atual</span><strong id="homeWeight">100,0 kg</strong></div><div class="bar"><i id="goalBar"></i></div><div class="hint" id="goalText">5 kg para sua meta</div></div>
+ <div class="grid">
+  <div class="card"><div class="muted">💧 Água hoje</div><div class="metric" id="homeWater">0 ml</div><div class="hint">Meta pessoal configurável</div></div>
+  <div class="card"><div class="muted">🔥 Calorias</div><div class="metric" id="homeCalories">0 kcal</div><div class="hint">Registradas hoje</div></div>
+  <div class="card"><div class="muted">🏋️ Treinos</div><div class="metric" id="homeWorkouts">0</div><div class="hint">Nesta semana</div></div>
+  <div class="card"><div class="muted">📈 Registros</div><div class="metric" id="homeEntries">0</div><div class="hint">Pesagens salvas</div></div>
+ </div>
+ <div class="card"><div class="title">Resumo de hoje</div><div class="hint">Registre água, alimentação e treino nas abas abaixo. Seus dados ficam salvos neste navegador neste aparelho.</div></div>
+</section>
+
+<section id="water">
+ <div class="title">💧 Hidratação</div>
+ <div class="card"><div class="eyebrow">CONSUMO DE HOJE</div><div class="big" id="waterTotal">0 ml</div><div class="bar"><i id="waterBar"></i></div><div class="row"><span class="muted">Meta diária</span><strong id="waterGoalLabel">3000 ml</strong></div></div>
+ <div class="card"><label>Definir meta diária (ml)</label><input id="waterGoal" type="number" min="250" step="250" value="3000"><button onclick="saveWaterGoal()">Salvar meta</button><div class="actions" style="margin-top:14px"><button onclick="addWater(250)">+250 ml</button><button onclick="addWater(500)">+500 ml</button><button onclick="addWater(750)">+750 ml</button><button class="secondary" onclick="resetWater()">Zerar hoje</button></div></div>
+ <div class="hint">A meta é uma referência ajustável, não uma prescrição médica. Necessidades variam com clima, atividade física e saúde.</div>
+</section>
+
+<section id="food">
+ <div class="title">🥗 Alimentação</div>
+ <div class="card"><div class="row"><span class="muted">Calorias registradas hoje</span><strong class="gold" id="foodTotal">0 kcal</strong></div><label>Refeição</label><select id="meal"><option>Café da manhã</option><option>Almoço</option><option>Lanche</option><option>Jantar</option><option>Ceia</option></select><label>Alimento / descrição</label><input id="foodName" placeholder="Ex.: arroz, frango e legumes"><label>Calorias aproximadas (kcal)</label><input id="foodKcal" type="number" min="0" placeholder="Ex.: 450"><button onclick="addFood()">Adicionar refeição</button></div>
+ <div class="card"><div class="title">Registros de hoje</div><div id="foodList" class="hint">Nenhuma refeição registrada.</div></div>
+ <div class="hint">Use rótulos ou uma base nutricional confiável para estimar porções e calorias. Este diário não substitui orientação nutricional.</div>
+</section>
+
+<section id="training">
+ <div class="title">🏋️ Treinamento</div>
+ <div class="card"><label>Treino realizado</label><select id="workoutName"><option>Peito + tríceps</option><option>Costas + bíceps</option><option>Pernas</option><option>Ombros + abdômen</option><option>Full body</option><option>Cardio</option><option>Outro</option></select><label>Observações / cargas</label><textarea id="workoutNotes" rows="3" placeholder="Ex.: supino 3x10 com 30 kg"></textarea><button onclick="addWorkout()">Concluir e registrar treino</button></div>
+ <div class="card"><div class="title">Histórico desta semana</div><div id="workoutList" class="hint">Nenhum treino registrado.</div></div>
+</section>
+
+<section id="progress">
+ <div class="title">📈 Evolução</div>
+ <div class="card"><label>Peso (kg)</label><input id="weightInput" type="number" step="0.1" placeholder="Ex.: 100"><label>Observação (opcional)</label><input id="weightNote" placeholder="Ex.: em jejum"><button onclick="addWeight()">Salvar pesagem</button></div>
+ <div class="card"><div class="title">Histórico de peso</div><div id="weightList" class="hint">Nenhuma pesagem registrada.</div></div>
+ <div class="card"><button class="secondary" onclick="exportData()">Exportar backup dos meus dados</button><p class="hint">Guarde o arquivo de backup em local seguro. Os dados deste protótipo ficam no armazenamento local do navegador e podem ser perdidos se os dados do site forem apagados ou você trocar de aparelho.</p></div>
+</section>
+
+<nav class="tabs">
+ <button class="active" onclick="tab('home',this)"><b>⌂</b>Início</button>
+ <button onclick="tab('training',this)"><b>🏋</b>Treino</button>
+ <button onclick="tab('food',this)"><b>🥗</b>Dieta</button>
+ <button onclick="tab('water',this)"><b>💧</b>Água</button>
+ <button onclick="tab('progress',this)"><b>↗</b>Evolução</button>
+</nav>
+<script>
+const KEY='phProjetoEvolucao_v1';
+const today=()=>new Date().toISOString().slice(0,10);
+let db=JSON.parse(localStorage.getItem(KEY)||'{"water":{},"waterGoal":3000,"foods":[],"workouts":[],"weights":[]}');
+function save(){localStorage.setItem(KEY,JSON.stringify(db));render()}
+function tab(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render()}
+function addWater(n){db.water[today()]=(db.water[today()]||0)+n;save()}
+function resetWater(){db.water[today()]=0;save()}
+function saveWaterGoal(){let n=+document.getElementById('waterGoal').value;if(n>=250){db.waterGoal=n;save()}}
+function addFood(){let name=document.getElementById('foodName').value.trim(),k=+document.getElementById('foodKcal').value;if(!name||k<0)return;db.foods.push({date:today(),meal:document.getElementById('meal').value,name,k});document.getElementById('foodName').value='';document.getElementById('foodKcal').value='';save()}
+function addWorkout(){db.workouts.push({date:today(),name:document.getElementById('workoutName').value,notes:document.getElementById('workoutNotes').value});document.getElementById('workoutNotes').value='';save()}
+function addWeight(){let w=+document.getElementById('weightInput').value;if(!w||w<30||w>300)return;db.weights.push({date:today(),w,note:document.getElementById('weightNote').value});document.getElementById('weightInput').value='';document.getElementById('weightNote').value='';save()}
+function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download='PH-Projeto-Evolucao-backup.json';a.click();URL.revokeObjectURL(url)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+ let w=db.weights.length?db.weights[db.weights.length-1].w:100,water=db.water[today()]||0,foods=db.foods.filter(x=>x.date===today()),kcal=foods.reduce((a,x)=>a+x.k,0),week=new Date();week.setDate(week.getDate()-6);let ws=db.workouts.filter(x=>new Date(x.date+'T00:00:00')>=week);
+ document.getElementById('homeWeight').textContent=w.toFixed(1)+' kg';document.getElementById('goalBar').style.width=Math.max(0,Math.min(100,(100-w)/5*100))+'%';document.getElementById('goalText').textContent=Math.max(0,w-95).toFixed(1)+' kg para sua meta';document.getElementById('homeWater').textContent=water+' ml';document.getElementById('homeCalories').textContent=kcal+' kcal';document.getElementById('homeWorkouts').textContent=ws.length;document.getElementById('homeEntries').textContent=db.weights.length;
+ document.getElementById('waterTotal').textContent=water+' ml';document.getElementById('waterGoalLabel').textContent=db.waterGoal+' ml';document.getElementById('waterGoal').value=db.waterGoal;document.getElementById('waterBar').style.width=Math.min(100,water/db.waterGoal*100)+'%';
+ document.getElementById('foodTotal').textContent=kcal+' kcal';document.getElementById('foodList').innerHTML=foods.length?foods.map(x=>`<div class="listitem"><b>${esc(x.meal)}</b> — ${esc(x.name)} <span class="gold">${x.k} kcal</span></div>`).join(''):'Nenhuma refeição registrada.';
+ document.getElementById('workoutList').innerHTML=ws.length?ws.slice().reverse().map(x=>`<div class="listitem"><b>${esc(x.name)}</b><div class="hint">${esc(x.date)} · ${esc(x.notes||'Sem observações')}</div></div>`).join(''):'Nenhum treino registrado.';
+ document.getElementById('weightList').innerHTML=db.weights.length?db.weights.slice().reverse().map(x=>`<div class="listitem"><b>${x.w.toFixed(1)} kg</b><div class="hint">${esc(x.date)} · ${esc(x.note||'')}</div></div>`).join(''):'Nenhuma pesagem registrada.';
+}
+render();
+</script>
+</body></html>
